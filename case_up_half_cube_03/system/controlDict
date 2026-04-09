@@ -1,0 +1,156 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     reactingFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+endTime         0.01;
+
+//stopAt          writeNow;
+deltaT          1e-8; //0.01; // Adjust based on CFL for 6.5 m/s
+
+writeControl    adjustableRunTime;  //timeStep;
+
+writeInterval   0.001;
+
+purgeWrite      10;//0;
+
+writeFormat     binary; //ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           0.4; //1;
+maxDeltaT       1e-4;
+
+functions
+{
+probes_H2_vertical
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   0.001;
+        fields          (H2);
+
+       probeLocations
+    (
+    	(0.2 0 0.05)
+  
+    	(0.2 0 1.05)
+    
+    	(0.2 0 2.00)
+    
+    	(0.2 0 3.00)
+    
+    	(0.2 0 4.00)
+  
+    	(0.2 0 4.90)
+    );
+    }
+
+    probes_H2_floorDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   0.001;
+        fields          (H2);
+
+        probeLocations
+        (
+            (0 0 0.05)
+            (1 1 0.05)
+            (2 2 0.05)
+            (3 3 0.05)
+            (4 4 0.05)
+        );
+    }
+
+    probes_H2_middleDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   0.001;
+        fields          (H2);
+
+        probeLocations
+    (
+    	(0 0 4.0)
+    	(1 1 4.0)
+    	(2 2 4.0)
+    	(3 3 4.0)
+    	(4 4 4.0)
+    );
+    }
+
+    probes_H2_ceilingDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   0.001;
+        fields          (H2);
+
+       probeLocations
+    (
+    	(0 0 4.9)
+    	(1 1 5.4)
+    	(2 2 5.9)
+    	(3 3 6.4)
+    	(4 4 6.9)
+    );
+    }
+
+    myResiduals
+    {
+        type            solverInfo;
+        libs            ("libutilityFunctionObjects.so");
+
+        executeControl  timeStep;
+        executeInterval 100;      // Sample less frequently
+
+        writeControl    timeStep;
+        writeInterval   100;      // Write every 100 timesteps
+                                  
+        // List the fields to monitor (add more as needed)
+        fields          (p U k epsilon h H2);
+
+        // Optional: Set to 'yes' to also output residual fields to time directories
+        // writeResidualFields yes;
+
+        // Optional: Control when to execute (defaults to timeStep if unspecified)
+        // executeControl  timeStep;
+        // executeInterval 1;
+    }
+
+
+}
+// ************************************************************************* //

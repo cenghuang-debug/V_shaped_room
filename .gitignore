@@ -1,0 +1,52 @@
+# ============================================================
+# OpenFOAM .gitignore — track only source/config files
+# ============================================================
+
+# Generated mesh (re-created by Allrun / snappyHexMesh)
+**/constant/polyMesh/
+**/constant/extendedFeatureEdgeMesh/
+
+# Generated edge meshes (re-created by surfaceFeatureExtract)
+**/*.eMesh
+
+# Compiled dynamic code (re-created at run time)
+**/dynamicCode/
+
+# Parallel decomposition directories
+**/processor*/
+
+# OpenFOAM time-step directories (generated, not source)
+# Keep 0.orig — the source template for initial conditions
+[0-9]*/
+!0.orig/
+**/[0-9]*/
+!**/0.orig/
+
+# Post-processing output
+**/postProcessing/
+
+# Log files
+log.*
+**/log.*
+
+# Windows / WSL Zone Identifier files
+**/*:Zone.Identifier
+**/*_Zone.Identifier
+**/*:Zone.Identifier:Zone.Identifier
+**/*_Zone.Identifier:Zone.Identifier
+
+# Python cache
+__pycache__/
+*.pyc
+
+# ParaView state files (auto-generated)
+*.pvsm
+
+# Scratch / backup files
+*.orig.*
+*.bak
+*~
+.ipynb_checkpoints/
+case_up_half_cube_01_GitHub/
+**/*:sec.endpointdlp
+**/*_sec.endpointdlp

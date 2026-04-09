@@ -1,0 +1,185 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "system";
+    object      controlDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+application     rhoReactingBuoyantFoam; //reactingFoam;
+
+startFrom       startTime;
+
+startTime       0;
+
+endTime         200;
+
+deltaT          1e-4; //0.01; // Adjust based on CFL for 6.5 m/s
+
+writeControl    adjustableRunTime;  //timeStep;
+
+writeInterval   10;
+
+purgeWrite      10;//0;
+
+writeFormat     binary; //ascii;
+
+writePrecision  6;
+
+writeCompression off;
+
+timeFormat      general;
+
+timePrecision   6;
+
+runTimeModifiable yes;
+
+adjustTimeStep  yes;
+
+maxCo           2.0; //1;
+
+functions
+{
+probes_H2_vertical
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   1;
+        fields          (H2);
+
+        probeLocations
+        (
+            (0.2 0 0.05)
+            (0.2 0 0.50)
+            (0.2 0 1.00)
+            (0.2 0 1.50)
+            (0.2 0 2.00)
+            (0.2 0 2.50)
+            (0.2 0 3.00)
+            (0.2 0 3.50)
+            (0.2 0 4.00)
+            (0.2 0 4.50)
+            (0.2 0 4.90)
+        );
+    }
+
+    probes_H2_floorDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   1;
+        fields          (H2);
+
+        probeLocations
+        (
+            (0 0 0.05)
+            (1 1 0.05)
+            (2 2 0.05)
+            (3 3 0.05)
+            (4 4 0.05)
+        );
+    }
+
+    probes_H2_middleDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   1;
+        fields          (H2);
+
+        probeLocations
+        (
+            (0 0 4.0)
+            (1 1 4.0)
+            (2 2 4.0)
+            (3 3 4.0)
+            (4 4 4.0)
+        );
+    }
+
+    probes_H2_ceilingDiagonal
+    {
+        type            probes;
+        libs            ("libsampling.so");
+        writeControl    runTime;
+        writeInterval   1;
+        fields          (H2);
+
+        probeLocations
+        (
+            (0 0 4.9)
+            (1 1 5.5)
+            (2 2 6.1)
+            (3 3 6.7)
+            (4 4 7.3)
+        );
+    }
+
+    myResiduals
+    {
+        type            solverInfo;
+        libs            ("libutilityFunctionObjects.so");
+
+        executeControl  timeStep;
+        executeInterval 100;      // Sample less frequently
+
+        writeControl    timeStep;
+        writeInterval   100;      // Write every 100 timesteps
+                                  
+        // List the fields to monitor (add more as needed)
+        fields          (p U k epsilon h H2);
+
+        // Optional: Set to 'yes' to also output residual fields to time directories
+        // writeResidualFields yes;
+
+        // Optional: Control when to execute (defaults to timeStep if unspecified)
+        // executeControl  timeStep;
+        // executeInterval 1;
+    }
+
+    massFlowVentA
+    {
+        type            surfaceFieldValue;//patchFlowRate;
+        libs            (fieldFunctionObjects);
+        //excuting and sampling frequency
+        executeControl  runTime;
+        executeInterval 1;    //execute every 0.1 s
+        writeControl    runTime;
+        writeInterval   1;    //write every 0.1 s
+        log                 true;
+        writeFields         no;
+        regionType      patch;
+        name            vent_a;
+        operation       sum;
+        fields          (phi);
+    }
+    massFlowVentB
+    {
+        type            surfaceFieldValue;//patchFlowRate;
+        libs            (fieldFunctionObjects);
+        //excuting and sampling frequency
+        executeControl  runTime;
+        executeInterval 1;    //execute every 0.1 s
+        writeControl    runTime;
+        writeInterval   1;    //write every 0.1 s
+        log                 true;
+        writeFields         no;
+        regionType      patch;
+        name            vent_b;
+        operation       sum;
+        fields          (phi);
+    }
+}
+// ************************************************************************* //

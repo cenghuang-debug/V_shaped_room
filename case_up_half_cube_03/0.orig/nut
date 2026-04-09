@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      nut;
+}
+
+dimensions      [0 2 -1 0 0 0 0];
+
+// nut = Cmu * k^2 / epsilon = 0.09 * (3.75e-5)^2 / 2.76e-6 ~ 4.6e-5 m^2/s
+internalField   uniform 4.6e-5;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+
+    right
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    top
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    bottom
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    front
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    back
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    walls
+    {
+        type            nutkWallFunction;
+        value           $internalField;
+    }
+
+    source
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    nozzle_wall_rest
+    {
+        type            nutkWallFunction;
+        value           $internalField;
+    }
+}
