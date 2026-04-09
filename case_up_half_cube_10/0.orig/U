@@ -1,0 +1,75 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0);
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    top
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    bottom
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    front
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    back
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    walls
+    {
+        type            noSlip;
+    }
+    source
+    {
+        type            fixedValue;
+        value           uniform (0 0 200);
+    }
+    nozzle_wall_rest
+    {
+        type            noSlip;
+    }
+}
+
+
+// ************************************************************************* //

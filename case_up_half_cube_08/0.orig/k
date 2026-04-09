@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      k;
+}
+
+dimensions      [0 2 -2 0 0 0 0];
+
+// k = 1.5*(I*U)^2 = 1.5*(0.01*0.5)^2 ~ 3.75e-5 for ambient (U~0.5 m/s, I=5%)
+internalField   uniform 3.75e-5;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+
+    right
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    top
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    bottom
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    front
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    back
+    {
+        type            inletOutlet;
+        inletValue      $internalField;
+        value           $internalField;
+    }
+
+    walls
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+
+    // case06: k scaled from Birch: 15124.06*(1200/2008.25)^2 = 5400, I=5%, V=1200 m/s
+    source
+    {
+        type            fixedValue;
+        value           uniform 5400;
+    }
+
+    nozzle_wall_rest
+    {
+        type            kqRWallFunction;
+        value           $internalField;
+    }
+}

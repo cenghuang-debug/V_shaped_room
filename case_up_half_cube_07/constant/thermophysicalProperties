@@ -1,0 +1,122 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    location    "constant";
+    object      thermophysicalProperties;
+}
+
+thermoType
+{
+    type            hePsiThermo;
+    mixture         multiComponentMixture;
+    transport       sutherland;
+    thermo          janaf;
+    equationOfState perfectGas;
+    specie          specie;
+    energy          sensibleEnthalpy;
+}
+
+
+
+species
+(
+    H2
+    O2
+    N2
+    H2O
+);
+
+inertSpecie N2;
+
+H2
+{
+    specie
+    {
+        molWeight       2.01588;
+    }
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+        highCpCoeffs    ( 3.337279e+00 -4.940247e-05 4.994568e-07 -1.795664e-10 2.002554e-14 -9.501589e+02 -3.205023e+00 );
+        lowCpCoeffs     ( 2.344331e+00 7.980521e-03 -1.947815e-05 2.015721e-08 -7.376118e-12 -9.179352e+02 6.830102e-01 );
+    }
+    transport
+    {
+        As              6.897e-07;
+        Ts              97;
+    }
+}
+
+O2
+{
+    specie
+    {
+        molWeight       31.9988;
+    }
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+        highCpCoeffs    ( 3.282538e+00 1.483088e-03 -7.579667e-07 2.094706e-10 -2.167178e-14 -1.088458e+03 5.453231e+00 );
+        lowCpCoeffs     ( 3.782456e+00 -2.996734e-03 9.847302e-06 -9.681295e-09 3.243728e-12 -1.063944e+03 3.657676e+00 );
+    }
+    transport
+    {
+        As              1.67212e-06;
+        Ts              170.672;
+    }
+}
+
+N2
+{
+    specie
+    {
+        molWeight       28.0134;
+    }
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+        highCpCoeffs    ( 2.92664e+00 1.4879768e-03 -5.68476e-07 1.0097038e-10 -6.753351e-15 -9.227977e+02 5.980528e+00 );
+        lowCpCoeffs     ( 3.298677e+00 1.4082404e-03 -3.963222e-06 5.641515e-09 -2.444854e-12 -1.0208999e+03 3.950372e+00 );
+    }
+    transport
+    {
+        As              1.40673e-06;
+        Ts              111.0;
+    }
+}
+
+H2O
+{
+    specie
+    {
+        molWeight       18.01528;
+    }
+    thermodynamics
+    {
+        Tlow            200;
+        Thigh           5000;
+        Tcommon         1000;
+        highCpCoeffs    ( 3.033992e+00 2.176918e-03 -1.640725e-07 -9.704199e-11 1.682009e-14 -3.000429e+04 4.966770e+00 );
+        lowCpCoeffs     ( 4.198640e+00 -2.036434e-03 6.520402e-06 -5.487971e-09 1.771978e-12 -3.029372e+04 -8.490322e-01 );
+    }
+    transport
+    {
+        As              1.0e-06;
+        Ts              110.4;
+    }
+}

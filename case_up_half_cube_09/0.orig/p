@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      p;
+}
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 101325;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+
+    // Open faces: totalPressure anchors stagnation pressure at atmospheric.
+    // Paired with pressureInletOutletVelocity on U.
+    right
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        value           uniform 101325;
+    }
+
+    top
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        value           uniform 101325;
+    }
+
+    bottom
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        value           uniform 101325;
+    }
+
+    front
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        value           uniform 101325;
+    }
+
+    back
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        value           uniform 101325;
+    }
+
+    walls
+    {
+        type            fixedFluxPressure;
+        value           uniform 101325;
+    }
+
+    // fixedFluxPressure: consistent with fixedValue U at source.
+    // Allows pressure to find its natural value; no longer over-constrains
+    // the pressure equation alongside the prescribed velocity.
+    source
+    {
+        type            fixedFluxPressure;
+        value           uniform 101325;
+    }
+
+    nozzle_wall_rest
+    {
+        type            fixedFluxPressure;
+        value           uniform 101325;
+    }
+}

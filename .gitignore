@@ -42,6 +42,10 @@ __pycache__/
 # ParaView state files (auto-generated)
 *.pvsm
 
+# Vim swap files
+**/.*.swp
+**/*.swp
+
 # Scratch / backup files
 *.orig.*
 *.bak

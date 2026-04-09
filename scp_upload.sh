@@ -14,7 +14,8 @@ if [ $# -ne 1 ]; then
 fi
 
 CASE_NUM=$1
-BASE_DIR="case_up_half_cube_0${CASE_NUM}"
+CASE_PAD=$(printf "%02d" "$CASE_NUM")
+BASE_DIR="case_up_half_cube_${CASE_PAD}"
 
 LOCAL_PATH="./${BASE_DIR}"
 REMOTE_PATH="dardel-ft:~/naiss2024-5-347/OpenFOAM/chhua-v2406/run/V_house/"
@@ -25,7 +26,7 @@ if [ ! -d "$LOCAL_PATH" ]; then
     exit 1
 fi
 
-echo "Uploading case ${CASE_NUM} to Dardel..."
+echo "Uploading case ${CASE_PAD} to Dardel..."
 echo "Local path : $LOCAL_PATH"
 echo "Remote path: $REMOTE_PATH"
 

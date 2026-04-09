@@ -1,0 +1,77 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    object      alphat;
+}
+
+dimensions      [1 -1 -1 0 0 0 0];
+
+// alphat = rho * nut / Prt = 1.232 * 4.6e-5 / 0.85 ~ 6.66e-5 kg/(m.s)
+internalField   uniform 6.66e-5;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+
+    right
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    top
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    bottom
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    front
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    back
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    walls
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;
+    }
+
+    source
+    {
+        type            calculated;
+        value           $internalField;
+    }
+
+    nozzle_wall_rest
+    {
+        type            compressible::alphatWallFunction;
+        Prt             0.85;
+        value           $internalField;
+    }
+}
