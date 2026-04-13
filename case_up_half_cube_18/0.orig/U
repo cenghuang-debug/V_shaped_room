@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0.001);
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    top
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    bottom
+    {
+        type            noSlip;
+    }
+    front
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    back
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    walls
+    {
+        type            noSlip;
+    }
+    source
+    {
+        // Ramp U_z from 0 to 200 m/s over 2 ms to avoid a startup
+        // acoustic shock that clips T at the JANAF lower limit (200 K).
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    (0 0 0))
+            (0.2    (0 0 200))
+            (100.0    (0 0 200))
+        );
+        value           uniform (0 0 0);
+    }
+    nozzle_wall_rest
+    {
+        type            noSlip;
+    }
+}
+
+
+// ************************************************************************* //

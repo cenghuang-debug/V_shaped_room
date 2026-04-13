@@ -1,0 +1,93 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 101325;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        gamma           1.4;
+        U               U;
+        rho             rho;
+        psi             thermo:psi;
+        value           uniform 101325;
+    }
+    top
+    {
+        type            waveTransmissive;
+        field           p;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            4.0;
+        phi             phi;
+        rho             rho;
+        value           uniform 101325;
+    }
+    bottom
+    {
+        type            zeroGradient;
+    }
+    front
+    {
+        type            waveTransmissive;
+        field           p;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            4.0;
+        phi             phi;
+        rho             rho;
+        value           uniform 101325;
+    }
+    back
+    {
+        type            waveTransmissive;
+        field           p;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            4.0;
+        phi             phi;
+        rho             rho;
+        value           uniform 101325;
+    }
+    walls
+    {
+        type            zeroGradient;
+    }
+    source
+    {
+        type            zeroGradient;
+    }
+    nozzle_wall_rest
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //
