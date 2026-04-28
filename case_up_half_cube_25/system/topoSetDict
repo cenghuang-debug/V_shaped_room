@@ -1,0 +1,74 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      topoSetDict;
+}
+
+actions
+(
+    {
+        name    source;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+        {
+            patch "nozzle_wall";
+        }
+    }
+
+    {
+        name    source;
+        type    faceSet;
+        action  subset;
+        source  boxToFace;
+        sourceInfo
+        {
+            // Source is at the nozzle exit plane at z~1.0 m.
+            // z-range widened to ±1 mm (> cell size ~3.9 mm at level 8) for robustness.
+            // x covers notional half-width 20.05 mm (Birch 1987, 25.3mm square) + margin.
+            // y covers ±20.05 mm.
+            box (-0.021 -0.021 0.999) (0.021 0.021 1.001);
+        }
+    }
+
+    {
+        name    source;
+        type    faceSet;
+        action  subset;
+        source  normalToFace;
+        sourceInfo
+        {
+            normal (0 0 -1);
+            cos    0.95;
+        }
+    }
+
+    {
+        name    nozzle_wall_rest;
+        type    faceSet;
+        action  new;
+        source  patchToFace;
+        sourceInfo
+        {
+            patch "nozzle_wall";
+        }
+    }
+
+    {
+        name    nozzle_wall_rest;
+        type    faceSet;
+        action  subtract;
+        source  faceToFace;
+        set     source;
+    }
+);

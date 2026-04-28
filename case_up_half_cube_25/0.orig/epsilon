@@ -1,0 +1,86 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volScalarField;
+    location    "0";
+    object      epsilon;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 2 -3 0 0 0 0];
+
+internalField   uniform 2.76e-06;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            inletOutlet;
+        inletValue      uniform 2.76e-06;
+        value           uniform 2.76e-06;
+    }
+    top
+    {
+        type            inletOutlet;
+        inletValue      uniform 2.76e-06;
+        value           uniform 2.76e-06;
+    }
+    bottom
+    {
+        type            epsilonWallFunction;
+        value           uniform 2.76e-06;
+    }
+    front
+    {
+        type            inletOutlet;
+        inletValue      uniform 2.76e-06;
+        value           uniform 2.76e-06;
+    }
+    back
+    {
+        type            inletOutlet;
+        inletValue      uniform 2.76e-06;
+        value           uniform 2.76e-06;
+    }
+    walls
+    {
+        type            epsilonWallFunction;
+        value           uniform 2.76e-06;
+    }
+    source
+    {
+        // Explicit table synchronised with U ramp in 0.orig/U.
+        // ε = Cμ^(3/4) * k^(3/2) / L, Cμ=0.09, L=0.07*0.0401=2.807e-3 m (40.1 mm nozzle):
+        //   U=  0 m/s → ambient floor
+        //   U=800 m/s → k=2400 m²/s² → ε = 6.88e6 m²/s³
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    2.76e-06)
+            (0.4    6.88e6)
+            (100.0  6.88e6)
+        );
+        value           uniform 2.76e-06;
+    }
+    nozzle_wall_rest
+    {
+        type            epsilonWallFunction;
+        value           uniform 2.76e-06;
+    }
+}
+
+
+// ************************************************************************* //
