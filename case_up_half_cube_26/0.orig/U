@@ -1,0 +1,81 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0.001);
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    top
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    bottom
+    {
+        type            noSlip;
+    }
+    front
+    {
+        type            symmetryPlane;
+    }
+    back
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    walls
+    {
+        type            noSlip;
+    }
+    source
+    {
+        // Single-stage ramp: 0 → 2008.25 m/s over 0.5 s (slope = 4016 m/s²).
+        // k and epsilon auto-scale via turbulentIntensityKineticEnergyInlet
+        // and turbulentMixingLengthDissipationRateInlet — no manual tables needed.
+        // If T drops below 200 K, extend ramp duration (e.g. to 0.75–1.0 s).
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    (0 0 0))
+            (0.5    (0 0 2008.25))
+            (100.0  (0 0 2008.25))
+        );
+        value           uniform (0 0 0);
+    }
+    nozzle_wall_rest
+    {
+        type            noSlip;
+    }
+}
+
+
+// ************************************************************************* //

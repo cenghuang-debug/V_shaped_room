@@ -25,6 +25,9 @@
 # Post-processing output
 **/postProcessing/
 
+# ParaFoam / foamToVTK output
+**/VTK/
+
 # Log files
 log.*
 **/log.*
