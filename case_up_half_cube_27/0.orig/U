@@ -1,0 +1,84 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      binary;
+    arch        "LSB;label=32;scalar=64";
+    class       volVectorField;
+    location    "0";
+    object      U;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [0 1 -1 0 0 0 0];
+
+internalField   uniform (0 0 0.001);
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    top
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    bottom
+    {
+        type            noSlip;
+    }
+    front
+    {
+        type            symmetryPlane;
+    }
+    back
+    {
+        type            pressureInletOutletVelocity;
+        tangentialVelocity uniform (0 0 0);
+        value           uniform (0 0 0);
+    }
+    walls
+    {
+        type            noSlip;
+    }
+    source
+    {
+        // Ramp: 0 → 2008.25 m/s over 1.0 s (slope = 2008 m/s²).
+        // Extended from 0.5 s (case 26) to 1.0 s: gentler passage through
+        // the sonic transition (~Ma 1 crossed at t ≈ 0.64 s on this ramp).
+        // Source pressure is now fixedValue 101325 (see 0.orig/p), enforcing
+        // the Birch 1987 ambient-pressure condition throughout.
+        // k and epsilon auto-scale via turbulentIntensityKineticEnergyInlet
+        // and turbulentMixingLengthDissipationRateInlet.
+        type            uniformFixedValue;
+        uniformValue    table
+        (
+            (0.0    (0 0 0))
+            (1.0    (0 0 2008.25))
+            (100.0  (0 0 2008.25))
+        );
+        value           uniform (0 0 0);
+    }
+    nozzle_wall_rest
+    {
+        type            noSlip;
+    }
+}
+
+
+// ************************************************************************* //

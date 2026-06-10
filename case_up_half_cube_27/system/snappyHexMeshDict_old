@@ -1,0 +1,200 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  v2406                                 |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       dictionary;
+    object      snappyHexMeshDict;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+castellatedMesh true;
+snap            true;
+addLayers       false;
+
+geometry
+{
+    walls.stl
+    {
+        type triSurfaceMesh;
+        name walls;
+    }
+
+    nozzle_wall.stl
+    {
+        type triSurfaceMesh;
+        name nozzle_wall;
+    }
+
+  
+
+    refinementBox_big  // the V-shape room size
+    {
+        type box;
+        min  (0 -6 0);
+        max  (10 6 8);
+    }
+
+    refinementBox_medium
+    {
+        type box;
+        min  (0 -4 0);
+        max  (2  4 5);
+    }
+
+    refinementBox_small
+    {
+        type box;
+        min  (0 -2 0.5);
+        max  (1  2 1.5);
+    }
+
+    refinementBox_xsmall
+    {
+        type box;
+        min  (0   -1 0.7);
+        max  (0.5  1 1.3);
+    }
+
+    refinementBox_2xsmall
+    {
+        type box;
+        min  (0  -0.4 0.9);
+        max  (0.2 0.4 1.1);
+    }
+}
+
+castellatedMeshControls
+{
+    maxLocalCells 100000;
+    maxGlobalCells 2000000;
+    minRefinementCells 0;
+    nCellsBetweenLevels 3;
+
+    features
+    (
+    );
+
+    refinementSurfaces
+    {
+        walls
+        {
+            level (2 2);
+        }
+
+        nozzle_wall
+        {
+            level (2 2);
+        }
+
+      
+    }
+
+    resolveFeatureAngle 10;
+
+    refinementRegions
+    {
+        refinementBox_big
+        {
+            mode inside;
+            levels ((1 1));
+        }
+
+        refinementBox_medium
+        {
+            mode inside;
+            levels ((2 2));
+        }
+
+        refinementBox_small
+        {
+            mode inside;
+            levels ((3 3));
+        }
+
+        refinementBox_xsmall
+        {
+            mode inside;
+            levels ((4 4));
+        }
+
+        refinementBox_2xsmall
+        {
+            mode inside;
+            levels ((5 5));
+        }
+    }
+
+    locationInMesh (1.23 0.17 1.37);
+
+    allowFreeStandingZoneFaces false;
+}
+
+snapControls
+{
+    nSmoothPatch 3;
+    tolerance 1.0;
+    nSolveIter 300;
+    nRelaxIter 5;
+
+    nFeatureSnapIter 10;
+    implicitFeatureSnap true;
+    explicitFeatureSnap false;
+    multiRegionFeatureSnap false;
+}
+
+addLayersControls
+{
+    relativeSizes true;
+
+    layers
+    {
+    }
+
+    expansionRatio 1.0;
+    finalLayerThickness 0.25;
+    minThickness 0.2;
+    nGrow 0;
+
+    featureAngle 30;
+    nRelaxIter 5;
+    nSmoothSurfaceNormals 1;
+    nSmoothNormals 3;
+    nSmoothThickness 10;
+    maxFaceThicknessRatio 0.5;
+    maxThicknessToMedialRatio 0.3;
+    minMedialAxisAngle 90;
+    nBufferCellsNoExtrude 0;
+    nLayerIter 50;
+    nRelaxedIter 20;
+}
+
+meshQualityControls
+{
+    #include "meshQualityDict"
+
+    relaxed
+    {
+        maxNonOrtho 75;
+    }
+
+    nSmoothScale 4;
+    errorReduction 0.75;
+}
+
+writeFlags
+(
+    scalarLevels
+    layerSets
+    layerFields
+);
+
+mergeTolerance 1E-6;
+
+// ************************************************************************* //

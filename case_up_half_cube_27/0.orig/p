@@ -1,0 +1,94 @@
+/*--------------------------------*- C++ -*----------------------------------*\
+| =========                 |                                                 |
+| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |
+|  \\    /   O peration     | Version:  2406                                  |
+|   \\  /    A nd           | Website:  www.openfoam.com                      |
+|    \\/     M anipulation  |                                                 |
+\*---------------------------------------------------------------------------*/
+FoamFile
+{
+    version     2.0;
+    format      ascii;
+    class       volScalarField;
+    location    "0";
+    object      p;
+}
+// * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * //
+
+dimensions      [1 -1 -2 0 0 0 0];
+
+internalField   uniform 101325;
+
+boundaryField
+{
+    left
+    {
+        type            symmetryPlane;
+    }
+    right
+    {
+        type            totalPressure;
+        p0              uniform 101325;
+        gamma           1.4;
+        U               U;
+        rho             rho;
+        psi             thermo:psi;
+        value           uniform 101325;
+    }
+    top
+    {
+        type            waveTransmissive;
+        field           p;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            4.0;
+        phi             phi;
+        rho             rho;
+        value           uniform 101325;
+    }
+    bottom
+    {
+        type            zeroGradient;
+    }
+    front
+    {
+        type            symmetryPlane;
+    }
+    back
+    {
+        type            waveTransmissive;
+        field           p;
+        psi             thermo:psi;
+        gamma           1.4;
+        fieldInf        101325;
+        lInf            4.0;
+        phi             phi;
+        rho             rho;
+        value           uniform 101325;
+    }
+    walls
+    {
+        type            zeroGradient;
+    }
+    source
+    {
+        // fixedValue enforces the Birch 1987 notional nozzle assumption:
+        // the equivalent source exits at ambient pressure at all velocities.
+        // For the supersonic regime (Ma > 1, reached at V > 1285 m/s ≈ t > 0.64 s
+        // on the 1.0 s ramp), fixing both p and U is physically correct — all
+        // characteristics propagate downstream and no information travels back
+        // to the inlet.  This mirrors the sonicFoam/forwardStep tutorial pattern.
+        // zeroGradient was wrong: it extrapolated the sub-ambient near-nozzle
+        // pressure back to the inlet face, driving T below the 200 K JANAF floor.
+        type            fixedValue;
+        value           uniform 101325;
+    }
+    nozzle_wall_rest
+    {
+        type            zeroGradient;
+    }
+}
+
+
+// ************************************************************************* //
